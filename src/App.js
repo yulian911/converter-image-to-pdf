@@ -1,23 +1,34 @@
-import logo from './logo.svg';
+
 import './App.css';
+import { useState } from 'react';
+import Images from './assets/images.jpg'
+import { jsPDF } from "jspdf";
+
 
 function App() {
+  const [image,setImage]=useState()
+  const [show ,setShow]=useState()
+  const onImageChange = (e) => {
+    const [file] = e.target.files;
+    setImage(URL.createObjectURL(file));
+   }
+
+   const pdfDown=()=>{
+    const doc = new jsPDF();
+    doc.addImage(image,10,10)
+    doc.save('imgToPdf.pdf');
+   }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1>JPG ,JPEG,PNG do PDF</h1>
+      <div className="upload-img">
+        <input type='file'  accept=".png ,.jpg,.jpeg"  onChange={onImageChange}/>
+        Dodaj plik
+      </div>
+      <img className="showImg" src={image} />
+      <button onClick={pdfDown}>Converte</button>
+    
     </div>
   );
 }
